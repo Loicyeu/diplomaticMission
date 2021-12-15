@@ -6,6 +6,11 @@ import fr.loicyeu.diplomaticmission.exception.UnloadMapException;
 import fr.loicyeu.diplomaticmission.model.C;
 import fr.loicyeu.diplomaticmission.model.GameMap;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -62,6 +67,13 @@ public final class DMWorldCommand implements CommandExecutor {
                     //TODO
                     sender.sendMessage(C.ERROR + "Pas encore implémenté.");
                     break;
+                case "setcenter":
+                    try {
+                        setCenter(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+                    } catch (Exception e) {
+                        sender.sendMessage(C.ERROR + "Mauvaises coordonées.");
+                    }
+                    break;
                 default:
                     sender.sendMessage(C.ERROR + "Mauvais usage de la commande.");
                     break;
@@ -70,5 +82,12 @@ public final class DMWorldCommand implements CommandExecutor {
             System.out.println(C.ERROR + "You must be a player");
         }
         return true;
+    }
+
+    private void setCenter(int x,int y,int z){
+        Location center = new Location(GameMap.getInstance().getWorld(), x, y ,z);
+        Block chest = center.getBlock();
+        BlockState chestState = chest.getState();
+
     }
 }

@@ -11,6 +11,11 @@ public final class GameMap {
     private static GameMap instance;
     private final Location pos1;
     private final Location pos2;
+
+    public World getWorld() {
+        return world;
+    }
+
     private World world;
 
     private GameMap() {
