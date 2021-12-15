@@ -1,0 +1,19 @@
+name: DiplomaticMission
+version: '${project.version}'
+main: fr.loicyeu.diplomaticmission.DiplomaticMission
+api-version: 1.18
+authors: [ Loicyeu ]
+description: Mission diplomatique
+commands:
+  start:
+    description: Permet de commencer la partie
+    usage: /<command>
+  reveal:
+    description: Permet de réveler a tout le monde ton rôle
+    usage: /<command>
+  role:
+    description: Permet de connaître ton rôle.
+    usage: /<command>
+  dmworld:
+    description: Permet la gestion du monde
+    usage: /<command> [create|remove|tp|quit]
