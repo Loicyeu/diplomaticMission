@@ -7,10 +7,8 @@ import fr.loicyeu.diplomaticmission.model.C;
 import fr.loicyeu.diplomaticmission.model.GameMap;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -87,7 +85,6 @@ public final class DMWorldCommand implements CommandExecutor {
     private void setCenter(int x,int y,int z){
         Location center = new Location(GameMap.getInstance().getWorld(), x, y ,z);
         Block chest = center.getBlock();
-        BlockState chestState = chest.getState();
-
+        chest.setType(Material.CHEST);
     }
 }
