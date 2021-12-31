@@ -5,10 +5,11 @@ import org.bukkit.ChatColor;
 import java.util.*;
 
 public enum Role {
-    AMBASSADOR("Ambassadeur", "Survis et complète le coffre au centre de la map.", ChatColor.BLUE),
+    AMBASSADOR("Ambassadeur", "Complète le coffre au centre de la map.", ChatColor.BLUE),
     GUARD("Garde", "Protège l'ambassadeur à tout prix !", ChatColor.YELLOW),
     AMBITIOUS_GUARD("Garde ambitieux", "Soit le seul garde en vie si l'ambassadeur gagne.", ChatColor.GOLD),
-    MURDERER("Assassin", "Tue l'ambassadeur mais attention il est bien protégé.", ChatColor.RED);
+    MURDERER("Assassin", "Tue l'ambassadeur mais attention il est bien protégé.", ChatColor.RED),
+    THIEF("Voleur", "Tu voles le rôle de la première personne que tu tues", ChatColor.DARK_GREEN);
 
     private static final Map<Integer, Role[]> combinations;
 
@@ -31,8 +32,8 @@ public enum Role {
     }
 
     public static List<Role> getRandList(int nbPlayer) {
-        if (nbPlayer < 3 || nbPlayer > 5) {
-            throw new RuntimeException("You need to be at least 3 and 5 maximum");
+        if (nbPlayer < 3 || nbPlayer > 6) {
+            throw new RuntimeException("You need to be at least 3 and 6 maximum");
         }
         List<Role> roles = new ArrayList<>();
         Collections.addAll(roles, combinations.get(nbPlayer));
@@ -44,7 +45,7 @@ public enum Role {
      * @return The role name colored.
      */
     public String getRoleName() {
-        return getRoleName(false);
+        return getRoleName(true);
     }
 
     /**
@@ -53,7 +54,7 @@ public enum Role {
      */
     public String getRoleName(boolean colored) {
         if (colored) {
-            return color.toString() + roleName;
+            return color.toString() + roleName.toUpperCase();
         } else {
             return roleName;
         }
