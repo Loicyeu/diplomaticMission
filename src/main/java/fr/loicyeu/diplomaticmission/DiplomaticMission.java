@@ -3,9 +3,7 @@ package fr.loicyeu.diplomaticmission;
 import fr.loicyeu.diplomaticmission.command.DMWorldCommand;
 import fr.loicyeu.diplomaticmission.command.RoleCommand;
 import fr.loicyeu.diplomaticmission.command.StartCommand;
-import fr.loicyeu.diplomaticmission.command.TestCommand;
 import fr.loicyeu.diplomaticmission.listener.PlayerDeathListener;
-import fr.loicyeu.diplomaticmission.listener.SetupGui;
 import fr.loicyeu.diplomaticmission.model.C;
 import fr.loicyeu.diplomaticmission.model.PlayerData;
 import fr.loicyeu.diplomaticmission.model.Players;
@@ -25,7 +23,6 @@ public final class DiplomaticMission extends JavaPlugin {
             getServer().getPluginCommand("start").setExecutor(new StartCommand(this));
             getServer().getPluginCommand("role").setExecutor(new RoleCommand());
             getServer().getPluginCommand("dmworld").setExecutor(new DMWorldCommand());
-            getServer().getPluginCommand("test").setExecutor(new TestCommand());
         } catch (NullPointerException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
