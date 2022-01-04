@@ -48,7 +48,7 @@ public final class StartCommand implements CommandExecutor {
                 Role role = roles.remove(0);
                 players.addPlayer(p, role);
 //                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(role.getRoleName()));
-                p.sendTitle(role.getRoleName(), role.getWords(), -1, -1, -1);
+                p.sendTitle(role.getRoleName(), role.getWords(), -1, 100, -1);
             });
             try {
                 Thread.sleep(5000);

@@ -1,6 +1,7 @@
 package fr.loicyeu.diplomaticmission.command;
 
 import fr.loicyeu.diplomaticmission.model.C;
+import fr.loicyeu.diplomaticmission.model.PlayerData;
 import fr.loicyeu.diplomaticmission.model.Players;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +25,12 @@ public final class RoleCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            player.sendMessage(C.DEFAULT + "Ton rôle est : " + Players.getInstance().getData(player).getRole().getRoleName());
+            PlayerData data = Players.getInstance().getData(player);
+            if (data != null) {
+                player.sendMessage(C.DEFAULT + "Ton rôle est : " + data.getRole().getRoleName());
+            } else {
+                player.sendMessage(C.ERROR + "Tu n'as pas de rôle.");
+            }
         } else {
             sender.sendMessage("You must be a player.");
         }

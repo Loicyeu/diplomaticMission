@@ -16,4 +16,7 @@ commands:
     usage: /<command>
   dmworld:
     description: Permet la gestion du monde
-    usage: /<command> [create|remove|tp|quit]
+    usage: /<command> [create | remove | tp | quit]
+  test:
+    description: Commande de test
+    usage: /<command>

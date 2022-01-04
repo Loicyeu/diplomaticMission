@@ -4,7 +4,7 @@ import fr.loicyeu.diplomaticmission.exception.DeleteMapException;
 import fr.loicyeu.diplomaticmission.exception.PlayerOnMapException;
 import fr.loicyeu.diplomaticmission.exception.UnloadMapException;
 import fr.loicyeu.diplomaticmission.model.C;
-import fr.loicyeu.diplomaticmission.model.GameMap;
+import fr.loicyeu.diplomaticmission.model.Game;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +30,11 @@ public final class DMWorldCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            GameMap map = GameMap.getInstance();
+            Game map = Game.getInstance();
+            if (args.length <= 0) {
+                sender.sendMessage(C.ERROR + "Mauvais usage de la commande.");
+                return true;
+            }
             switch (args[0]) {
                 case "create":
                     sender.sendMessage(C.DEFAULT + "Génération du monde en cours...");

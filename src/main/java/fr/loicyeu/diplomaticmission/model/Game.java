@@ -6,29 +6,56 @@ import fr.loicyeu.diplomaticmission.exception.PlayerOnMapException;
 import fr.loicyeu.diplomaticmission.exception.UnloadMapException;
 import org.bukkit.*;
 
-public final class GameMap {
+import java.util.ArrayList;
+import java.util.Collection;
 
-    private static GameMap instance;
-    private final Location pos1;
-    private final Location pos2;
+public final class Game {
+
+    private static Game instance;
+    private World world;
+    private boolean ended;
+
+    private Game() {
+        this.world = null;
+        this.ended = false;
+    }
+
+    public static Game getInstance() {
+        if (instance == null) {
+            instance = new Game();
+        }
+        return instance;
+    }
+
+    /**
+     * End the game and return the list of the winners.
+     * Switch all the players on spectator mode.
+     *
+     * @return The list of the winners
+     */
+    public Collection<PlayerData> endGame(final boolean ambassadorWins) {
+        this.ended = true;
+        final Players players = Players.getInstance();
+        final Collection<PlayerData> winners = new ArrayList<>();
+        players.forEach(playerData -> {
+            if (ambassadorWins) {
+                switch (playerData.getRole()) {
+                    case AMBASSADOR:
+                    case GUARD:
+                    case AMBITIOUS_GUARD:
+                        winners.add(playerData);
+                }
+            } else {
+                if (playerData.getRole() == Role.MURDERER) {
+                    winners.add(playerData);
+                }
+            }
+        });
+        return winners;
+    }
 
     public World getWorld() {
         return world;
-    }
-
-    private World world;
-
-    private GameMap() {
-        this.pos1 = new Location(null, 1d, 1d, 1d);
-        this.pos2 = new Location(null, 1d, 1d, 1d);
-        this.world = null;
-    }
-
-    public static GameMap getInstance() {
-        if (instance == null) {
-            instance = new GameMap();
-        }
-        return instance;
     }
 
     /**
@@ -38,7 +65,7 @@ public final class GameMap {
      */
     public boolean generateWorld() {
         if (world == null) {
-            WorldCreator wc = new WorldCreator("Diplomatic Mission");
+            WorldCreator wc = new WorldCreator("DiplomaticMission");
             wc.environment(World.Environment.NORMAL);
             wc.type(WorldType.NORMAL);
             world = wc.createWorld();
