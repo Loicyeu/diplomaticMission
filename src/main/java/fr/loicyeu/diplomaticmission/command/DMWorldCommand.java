@@ -4,9 +4,7 @@ import fr.loicyeu.diplomaticmission.exception.DeleteMapException;
 import fr.loicyeu.diplomaticmission.exception.NoMapException;
 import fr.loicyeu.diplomaticmission.exception.PlayerOnMapException;
 import fr.loicyeu.diplomaticmission.exception.UnloadMapException;
-import fr.loicyeu.diplomaticmission.model.C;
-import fr.loicyeu.diplomaticmission.model.Game;
-import fr.loicyeu.diplomaticmission.model.GameMap;
+import fr.loicyeu.diplomaticmission.model.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -65,6 +63,12 @@ public final class DMWorldCommand implements CommandExecutor {
                     }
                     break;
                 case "tp":
+                    ((Player) sender).teleport(map.getHumanCenter());
+                    break;
+                case "tpall":
+                    for (PlayerData p : Players.getInstance().getAll()) {
+                        p.getPlayer().teleport(map.getHumanCenter());
+                    }
                 case "quit":
                     //TODO
                     sender.sendMessage(C.ERROR + "Pas encore implémenté.");

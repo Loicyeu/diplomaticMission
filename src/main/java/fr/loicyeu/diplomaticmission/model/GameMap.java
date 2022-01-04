@@ -10,6 +10,7 @@ public class GameMap {
 
     private World world;
     private Location center;
+    private Location humanCenter; // the center but one block higher (so on the chest)
     private int radius;
     private double safeZonePercent;
 
@@ -24,6 +25,10 @@ public class GameMap {
 
     public Location getCenter() {
         return center;
+    }
+
+    public Location getHumanCenter() {
+        return new Location(world, center.getX(), center.getY() + 1, center.getZ());
     }
 
     public int getRadius() {

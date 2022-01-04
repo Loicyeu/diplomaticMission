@@ -91,7 +91,7 @@ public final class StartCommand implements CommandExecutor {
 
         for (PlayerData p : Players.getInstance().getAll()) {
             if (p.getRole() == Role.AMBASSADOR) {
-                p.setSpawn(new Location(map.getWorld(), map.getCenter().getX(), map.getCenter().getY() + 1, map.getCenter().getZ()));
+                p.setSpawn(map.getHumanCenter());
             } else {
                 p.setSpawn(generateSpawn());
             }
