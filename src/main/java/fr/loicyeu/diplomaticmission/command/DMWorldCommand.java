@@ -5,9 +5,7 @@ import fr.loicyeu.diplomaticmission.exception.PlayerOnMapException;
 import fr.loicyeu.diplomaticmission.exception.UnloadMapException;
 import fr.loicyeu.diplomaticmission.model.C;
 import fr.loicyeu.diplomaticmission.model.Game;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -71,8 +69,8 @@ public final class DMWorldCommand implements CommandExecutor {
                     break;
                 case "setcenter":
                     try {
-                        setCenter(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
-                    } catch (Exception e) {
+                        setCenter(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
+                    } catch (NumberFormatException e) {
                         sender.sendMessage(C.ERROR + "Mauvaises coordonées.");
                     }
                     break;
@@ -86,8 +84,16 @@ public final class DMWorldCommand implements CommandExecutor {
         return true;
     }
 
-    private void setCenter(int x,int y,int z){
-        Location center = new Location(GameMap.getInstance().getWorld(), x, y ,z);
+    private void setCenter(int x, int y, int z, int radius) {
+        World world = Game.getInstance().getWorld();
+        Location center = new Location(world, x, y, z);
+
+        // Set the world border
+        WorldBorder worldBorder = world.getWorldBorder();
+        worldBorder.setCenter(center);
+        worldBorder.setSize(radius * 2);
+
+        // Set the block at the center as a chest
         Block chest = center.getBlock();
         chest.setType(Material.CHEST);
     }
