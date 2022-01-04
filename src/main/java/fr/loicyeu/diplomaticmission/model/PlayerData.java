@@ -32,6 +32,15 @@ public final class PlayerData {
         this.role = role;
     }
 
+    public Location getSpawn() {
+        return spawn;
+    }
+
+    public Location setSpawn(Location newSpawn) {
+        spawn = newSpawn;
+        return spawn;
+    }
+
     /**
      * Show the role in the action bar.
      * Write 'MORT' if the player is dead.

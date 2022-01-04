@@ -1,9 +1,10 @@
 package fr.loicyeu.diplomaticmission.command;
 
 import fr.loicyeu.diplomaticmission.DiplomaticMission;
-import fr.loicyeu.diplomaticmission.model.C;
-import fr.loicyeu.diplomaticmission.model.Players;
-import fr.loicyeu.diplomaticmission.model.Role;
+import fr.loicyeu.diplomaticmission.exception.NoMapException;
+import fr.loicyeu.diplomaticmission.model.*;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.List;
+
 
 public final class StartCommand implements CommandExecutor {
 
@@ -51,6 +53,11 @@ public final class StartCommand implements CommandExecutor {
                 p.sendTitle(role.getRoleName(), role.getWords(), -1, 100, -1);
             });
             try {
+                setPlayersSpawns();
+            } catch (NoMapException e) {
+                main.getServer().broadcastMessage(C.ERROR + "Aucun monde DM trouvé");
+            }
+            try {
                 Thread.sleep(5000);
                 main.getServer().broadcastMessage(C.DEFAULT + "3");
                 Thread.sleep(1000);
@@ -66,5 +73,44 @@ public final class StartCommand implements CommandExecutor {
             }
         }
         return false;
+    }
+
+    /**
+     * Gives all the players a random spawn
+     * Except for the Ambassador who spawns on the chest
+     * Everyone else spawns away from the center
+     *
+     * @throws NoMapException
+     */
+    private void setPlayersSpawns() throws NoMapException {
+        GameMap map = Game.getInstance().getMap();
+        World world = map.getWorld();
+        if (world == null) {
+            throw new NoMapException();
+        }
+
+        for (PlayerData p : Players.getInstance().getAll()) {
+            if (p.getRole() == Role.AMBASSADOR) {
+                p.setSpawn(new Location(map.getWorld(), map.getCenter().getX(), map.getCenter().getY() + 1, map.getCenter().getZ()));
+            } else {
+                p.setSpawn(generateSpawn());
+            }
+        }
+    }
+
+    /**
+     * Generates a random location away from the center
+     *
+     * @return The new Location
+     */
+    private Location generateSpawn() {
+        GameMap map = Game.getInstance().getMap();
+        Location newSpawn = new Location(map.getWorld(), 0, 0, 0);
+        double spawnZoneRadius = map.getRadius() - map.getRadius() * map.getSafeZonePercent();
+        double plusOrMinus = Math.random() - 0.5;
+        newSpawn.setX(map.getCenter().getX() + (plusOrMinus / Math.abs(plusOrMinus)) * (map.getRadius() * map.getSafeZonePercent() + Math.random() * spawnZoneRadius));
+        newSpawn.setZ(map.getCenter().getZ() + (plusOrMinus / Math.abs(plusOrMinus)) * (map.getRadius() * map.getSafeZonePercent() + Math.random() * spawnZoneRadius));
+        newSpawn.setY(map.getWorld().getHighestBlockYAt(newSpawn));
+        return newSpawn;
     }
 }

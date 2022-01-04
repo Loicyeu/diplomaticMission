@@ -1,10 +1,12 @@
 package fr.loicyeu.diplomaticmission.command;
 
 import fr.loicyeu.diplomaticmission.exception.DeleteMapException;
+import fr.loicyeu.diplomaticmission.exception.NoMapException;
 import fr.loicyeu.diplomaticmission.exception.PlayerOnMapException;
 import fr.loicyeu.diplomaticmission.exception.UnloadMapException;
 import fr.loicyeu.diplomaticmission.model.C;
 import fr.loicyeu.diplomaticmission.model.Game;
+import fr.loicyeu.diplomaticmission.model.GameMap;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -28,7 +30,7 @@ public final class DMWorldCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            Game map = Game.getInstance();
+            GameMap map = Game.getInstance().getMap();
             if (args.length <= 0) {
                 sender.sendMessage(C.ERROR + "Mauvais usage de la commande.");
                 return true;
@@ -69,9 +71,11 @@ public final class DMWorldCommand implements CommandExecutor {
                     break;
                 case "setcenter":
                     try {
-                        setCenter(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
+                        setCenter(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3]), Integer.parseInt(args[4]));
                     } catch (NumberFormatException e) {
                         sender.sendMessage(C.ERROR + "Mauvaises coordonées.");
+                    } catch (NoMapException e) {
+                        sender.sendMessage(C.ERROR + "Aucun monde DM trouvé");
                     }
                     break;
                 default:
@@ -84,9 +88,15 @@ public final class DMWorldCommand implements CommandExecutor {
         return true;
     }
 
-    private void setCenter(int x, int y, int z, int radius) {
-        World world = Game.getInstance().getWorld();
+    private void setCenter(double x, double y, double z, int radius) throws NoMapException {
+        GameMap map = Game.getInstance().getMap();
+        World world = map.getWorld();
+        if (world == null) {
+            throw new NoMapException();
+        }
         Location center = new Location(world, x, y, z);
+        map.setCenter(center);
+        map.setRadius(radius);
 
         // Set the world border
         WorldBorder worldBorder = world.getWorldBorder();
